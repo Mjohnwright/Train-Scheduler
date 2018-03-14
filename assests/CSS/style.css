@@ -1,0 +1,62 @@
+html{
+    max-width: 100%;
+}
+
+.container {
+    max-width: 100%;
+}
+
+.jumbotron, thead, .form-group, .panel, #addTrainPanel, .button, {
+    margin: auto;
+    width: 50%;
+    align-content: center;
+
+
+
+}
+
+.jumbotron{
+    color: white;
+    background-color: chocolate;
+
+}
+
+
+
+.input-group{
+    margin: auto;
+    width: 80%;
+}
+h1{
+    text-align: center;
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+
+}
+tr, .panel, .form-group, #addTrainPanel, button{
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px;
+
+}
+
+#headerText{
+    background-color: blue;
+    color: white;
+    font-size: 16px;
+}
+label{
+    font-size: 14px;
+}
+
+#addTrainPanel{
+    border-color: black;
+}
+
+.inputs{
+    width: 95%;
+    align-content: center;
+    margin-left: 20px;
+}
+.btn{
+    background-color: blue;
+    color: white;
+}
