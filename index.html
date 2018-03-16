@@ -8,6 +8,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!-- moment.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+
         <!-- // Latest jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -64,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label for="destination">First Train Time (HH:mm - military time)</label>
-                        <input type="text" class="form-control" id="firstTrainStart">
+                        <input type="time" class="form-control" id="firstTrainStart">
                     </div>
                     <div class="form-group">
                         <label for="destination">Frequency (min):</label>
@@ -76,9 +79,9 @@
                     <br>
                 </div>
             </div>
-
-
         </div>
+
+
         <!-- // Firebase Reference -->
         <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
 
@@ -96,8 +99,6 @@
 
             firebase.initializeApp(config);
 
-
-
             /*****************************
                  VARIABLES
             *****************************/
@@ -113,60 +114,96 @@
             // SUBMIT BUTTON TO ADD A TRAIN 
             $("#button").on("click", function () {
                 event.preventDefault();
-                //Calls a function that updates Firebase
-                upDateDb();
-            })
-
-            /*****************************
-                 FUNCTIONS
-            *****************************/
-            function upDateDb() {
 
                 // Grabs user input
                 var trainName = $("#trainName").val().trim();
                 var destName = $("#destName").val().trim();
                 var firstTrainStart = $("#firstTrainStart").val().trim(); // "DD/MM/YY").format("X")
                 var frequencyMin = $("#frequencyMin").val().trim();
+                //Calls a function that updates Firebase
+                // upDateDb();
 
-                // Converts user input to DB variable
                 newTrain = {
                     TrainName: trainName,
                     Destination: destName,
                     FirstTrain: firstTrainStart,
                     Frequency: frequencyMin
+                    // TimeStamp: moment.unix(Number) ????????
                 };
 
                 // Uploads user Input (New Train) data to the database
                 database.ref().push(newTrain);
 
-                // Firebase watcher + initial loader + order/limit is 1
-                database.ref().limitToLast(1).on("child_added", function (snapshot) {
-                    // storing the snapshot.val() in a variable for convenience
-                    var sv = snapshot.val();
+                // Clears each line of the submit form
+                $("#trainName").val('');
+                $("#destName").val('');
+                $("#firstTrainStart").val('');
+                $("#frequencyMin").val('');
+            })
 
+            // Firebase watcher + initial loader + order/limit is 1
+            database.ref().on("child_added", function (snapshot) {
+                // storing the snapshot.val() in a variable for convenience
+                var sv = snapshot.val();
 
-                    // Add each train's data into the table
-                    $("#trainInfo").append("<tr><td>" + trainName + "</td>" +
-                        "<td>" + destName + "</td>" +
-                        "<td>" + "'frequency (min)'" + "</td>" +
-                        "<td>" + "'Next Arrival'" + "</td>" +
-                        "<td>" + "'Minutes Away'" + "</td></tr>")
+                // translates BD object back into JS variables
+                trainName = sv.TrainName;
+                destName = sv.Destination;
+                firstTrainStart = sv.FirstTrain;
+                frequencyMin = sv.Frequency;
 
+                //tranlating time format to number format
+                var timeArr = firstTrainStart.split(':');
 
+                // First Time (pushed back 1 year to make sure it comes before current time)
+                var firstTimeConverted = moment().hours(timeArr[0]).minutes(timeArr[1])
+                console.log("firstTimeConverted: " + firstTimeConverted);
 
-                    // Handle the errors
-                }, function (errorObject) {
-                    console.log("Errors handled: " + errorObject.code);
-                });
-            }
+                // Current Time
+                var currentTime = moment();
+                console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+                // Difference between the times
+                var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+                console.log("DIFFERENCE IN TIME: " + diffTime);
+
+                // Time apart (remainder)
+                var tRemainder = diffTime % frequencyMin;
+                console.log(tRemainder);
+
+                // Minute Until Train
+                var MinutesTillTrain = frequencyMin - tRemainder;
+                console.log("MINUTES TILL TRAIN: " + MinutesTillTrain);
+
+                // Next Train
+                var nextTrainArrival = moment().add(MinutesTillTrain, "m").format("hh:mm A");
+
+                console.log(" nexttrainArrival: " + nextTrainArrival);
+
+                var nextTrain = moment().add(MinutesTillTrain, "m mm");
+                console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+                // Add each train's data into the table
+                $("#trainInfo").append("<tr><td>" + trainName + "</td>" +
+                    "<td>" + destName + "</td>" +
+                    "<td>" + frequencyMin + "</td>" +
+                    "<td>" + nextTrainArrival + "</td>" +
+                    "<td>" + MinutesTillTrain + "</td></tr>")
+
+                // Handle the errors
+            }, function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            });
         </script>
 
         <!-- // Latest Moment.js -->-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
 
         </script>
-
-
     </body>
 
 </html>
+
+<!-- Need to see updates from different computers -->
+<!-- How does the DB update the DOM when a new input in not added?  Do I need to use a timer to call a function?    -->
+<!-- Fix bug with the military time input -->

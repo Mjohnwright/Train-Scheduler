@@ -10,9 +10,6 @@ html{
     margin: auto;
     width: 50%;
     align-content: center;
-
-
-
 }
 
 .jumbotron{
@@ -20,8 +17,6 @@ html{
     background-color: chocolate;
 
 }
-
-
 
 .input-group{
     margin: auto;
@@ -37,9 +32,12 @@ tr, .panel, .form-group, #addTrainPanel, button{
     font-size: 12px;
 
 }
+th{
+    font-weight: bold;
+}
 
 #headerText{
-    background-color: blue;
+    background-color: rgb(17, 17, 219);
     color: white;
     font-size: 16px;
 }
@@ -57,6 +55,6 @@ label{
     margin-left: 20px;
 }
 .btn{
-    background-color: blue;
+    background-color:rgb(17, 17, 219);
     color: white;
 }
