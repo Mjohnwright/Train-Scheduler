@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="refresh" content="60">
         <title>Train Scheduler - Matthew Wright</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,6 +24,9 @@
 
         <!-- // Firebase Reference -->
         <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+
+        <!-- Link the Firebase page -->
+        <!-- https://console.firebase.google.com/project/trainscheduler-41970/database/trainscheduler-41970/data -->
 
 
     </head>
@@ -66,7 +70,7 @@
                     </div>
                     <div class="form-group">
                         <label for="destination">First Train Time (HH:mm - military time)</label>
-                        <input type="time" class="form-control" id="firstTrainStart">
+                        <input type="text" class="form-control" id="firstTrainStart">
                     </div>
                     <div class="form-group">
                         <label for="destination">Frequency (min):</label>

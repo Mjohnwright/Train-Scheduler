@@ -70,26 +70,50 @@ database.ref().on(
     firstTrainStart = sv.FirstTrain;
     frequencyMin = sv.Frequency;
 
-    //tranlating time format to number format
-    var timeArr = firstTrainStart.split(":");
-
-    // First Time (pushed back 1 year to make sure it comes before current time)
-    var firstTimeConverted = moment()
-      .hours(timeArr[0])
-      .minutes(timeArr[1]);
+    //subtract one year to innsure no time conflicts over calculated microseconds.
+    var firstTimeConverted = moment(firstTrainStart, "hh:mm").subtract(
+      1,
+      "years"
+    );
     console.log("firstTimeConverted: " + firstTimeConverted);
 
+
+    //tranlating time format to number format
+    // var timer = firstTrainStart;
+    // console.log("first train start", firstTrainStart); // xx:xx
+
+    //Splits the time value from a string to integers
+    // var timeArr = firstTrainStart.split(':'); //xx,xx (2 integers separated by comma)
+    // console.log("timeArr: " + timeArr);
+
+    //variables for the hours and minutes - separated
+    // var time = (timeArr[0]);
+    // var min = (timeArr[1]);
+    // console.log(min);
+
+    // var now = moment();
+    // console.log(now);
+    // var nowTime=now.d:
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+
+    // var firstTimeConverted = moment(firstTrainStart, "hh:mm").subtract(1, "years");
+
+    // var firstTimeConverted = now
+    //   .hours(timeArr[0])
+    //   .minutes(timeArr[1]);
+
     // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // var currentTime = moment();
+    // console.log("CURRENT TIME: " + currentTime);
 
     // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
+    // console.log("DIFFERENCE IN TIME: " + diffTime);
 
     // Time apart (remainder)
     var tRemainder = diffTime % frequencyMin;
-    console.log(tRemainder);
+    // console.log(tRemainder); 
 
     // Minute Until Train
     var MinutesTillTrain = frequencyMin - tRemainder;
@@ -97,11 +121,8 @@ database.ref().on(
 
     // Next Train
     var nextTrainArrival = moment()
-      .add(MinutesTillTrain, "m")
+      .add(MinutesTillTrain, "minutes")
       .format("hh:mm A");
-    console.log(" nexttrainArrival: " + nextTrainArrival);
-    var nextTrain = moment().add(MinutesTillTrain, "m mm");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
     // Add each train's data into the table
     $("#trainInfo").append(
@@ -121,10 +142,8 @@ database.ref().on(
         MinutesTillTrain +
         "</td></tr>"
     );
-
-    // Handle the errors
   },
-
+  // Handle the errors
   function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
   }
