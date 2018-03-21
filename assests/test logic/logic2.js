@@ -77,7 +77,29 @@ database.ref().on(
     );
     console.log("firstTimeConverted: " + firstTimeConverted);
 
-    // Difference between the times
+    // firstTimeConvertedA = firstTimeConverted.format("hh:mm");
+    // console.log(firstTimeConvertedA);
+
+    // Splits the time value from a string to integers
+    console.log(firstTrainStart);
+    var timeArr = firstTrainStart.split(":"); //xx,xx (2 integers separated by comma)
+    //variables for the hours and minutes - separated
+    var hour = timeArr[0];
+    var min = timeArr[1];
+
+    var currentTime = moment().format("hh:mm");
+    var currentTimeArr = currentTime.split(":");
+    var curHour = currentTimeArr[0];
+    var curMin = currentTimeArr[1];
+
+//*********************************************************** */
+    
+
+
+function compareTime() {
+      if (hour > curHour) {
+    
+        // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
     // console.log("DIFFERENCE IN TIME: " + diffTime);
 
@@ -86,13 +108,18 @@ database.ref().on(
     // console.log(tRemainder);
 
     // Minute Until Train
-    var MinutesTillTrain = frequencyMin - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + MinutesTillTrain);
 
     // Next Train
-    var nextTrainArrival = moment()
-      .add(MinutesTillTrain, "minutes")
-      .format("hh:mm A");
+    var nextTrainArrival = moment(firstTrainStart, "h:mm").format("hh:mm");
+    // .add(MinutesTillTrain, "minutes")
+    // .format("hh:mm A");
+    console.log("next Train: " + nextTrainArrival);
+    console.log("Firsttrain: " + firstTrainStart);
+
+    var MinutesTillTrain = nextTrainArrival - moment();
+
+    //frequencyMin - tRemainder;
+    // console.log("MINUTES TILL TRAIN: " + MinutesTillTrain);
 
     // Add each train's data into the table
     $("#trainInfo").append(
@@ -112,9 +139,63 @@ database.ref().on(
         MinutesTillTrain +
         "</td></tr>"
     );
-  },
+
+      } else {
+    // Difference between the times
+    diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    // console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % frequencyMin;
+    // console.log(tRemainder);
+
+    // Minute Until Train
+
+    // Next Train
+    var nextTrainArrival = moment(firstTrainStart, "h:mm").format("hh:mm");
+    // .add(MinutesTillTrain, "minutes")
+    // .format("hh:mm A");
+    console.log("next Train: " + nextTrainArrival);
+    console.log("Firsttrain: " + firstTrainStart);
+
+    var MinutesTillTrain = nextTrainArrival - moment();
+
+    frequencyMin - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + MinutesTillTrain);
+
+    // Add each train's data into the table
+    $("#trainInfo").append(
+      "<tr><td>" +
+        trainName +
+        "</td>" +
+        "<td>" +
+        destName +
+        "</td>" +
+        "<td>" +
+        frequencyMin +
+        "</td>" +
+        "<td>" +
+        nextTrainArrival +
+        "</td>" +
+        "<td>" +
+        MinutesTillTrain +
+        "</td></tr>"
+    );
+  }
+  }
   // Handle the errors
   function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
   }
 );
+
+    
+
+
+    compareTime();
+
+   
+    
+ 
+  
+  
