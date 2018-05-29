@@ -13,11 +13,11 @@ Train schedule application that uses Firebase to host train arrival and departur
 * Firebase database
 
 ### Screenshot
-![Full Size](Assests/images/ss.png)
+![Full Size](assests/images/ss.png)
 
-###DataBase
+### DataBase
 Firebase BD:
-https://console.firebase.google.com/project/trainscheduler-41970/database/trainscheduler-41970/data
+* https://console.firebase.google.com/project/trainscheduler-41970/database/trainscheduler-41970/data
 
 
 
