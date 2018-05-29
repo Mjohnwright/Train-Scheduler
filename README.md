@@ -1,4 +1,4 @@
-# :bullettrain_side: # Train-Scheduler
+# :bullettrain_side: Train-Scheduler
 
 ### Overview
 Train schedule application that uses Firebase to host train arrival and departure data.  Users can add their own train schedules and Firebase safely stores it.
